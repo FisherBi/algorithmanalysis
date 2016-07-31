@@ -44,7 +44,7 @@ public class MaximumContiguousSubsequenceSum {
 
     /**
      * Recursive maximum contiguous subsequence sum algorithm.
-     * ·ÖÖÎ·¨
+     * åˆ†æ²»æ³•
      * O(NlogN)
      */
     private static int maxSumRec(int[] a, int left, int right){
