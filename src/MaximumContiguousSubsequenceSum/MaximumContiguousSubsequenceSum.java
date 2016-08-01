@@ -1,4 +1,4 @@
-package src.MaximumContiguousSubsequenceSum;
+package MaximumContiguousSubsequenceSum;
 
 /**
  * Created by FisherBi on 2016/7/30.
@@ -79,6 +79,22 @@ public class MaximumContiguousSubsequenceSum {
 
     public static int maxSubSum3(int[] a){
         return maxSumRec(a, 0, a.length-1);
+    }
+
+    /**
+     * Linear-time maximum contiguous subsequence sum algorithm.
+     * O(N)
+     */
+    public static int maxSubSum4(int[] a){
+        int maxSum = 0, thisSum = 0;
+        for (int anA : a) {
+            thisSum += anA;
+            if (maxSum < thisSum)
+                maxSum = thisSum;
+            else if (thisSum < 0)
+                thisSum = 0;
+        }
+        return maxSum;
     }
 
 }
