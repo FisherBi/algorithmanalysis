@@ -46,11 +46,14 @@ public class AvlTree<T extends Comparable<? super T>> {
                 }else{
                     t = doubleWithLeftChild(t);
                 }
-            }else if(height(t.right) - height(t.left) == 2){
+            }
+        }else if(compareResult > 0){
+            t.right = insert(x,t.right);
+            if(height(t.right) - height(t.left) == 2){
                 if(compare(x,t.right) > 0){
-                    t = rotateWithLeftChild(t);
+                    t = rotateWithRightChild(t);
                 }else{
-                    t = doubleWithLeftChild(t);
+                    t = doubleWithRightChild(t);
                 }
             }
         }
@@ -58,13 +61,34 @@ public class AvlTree<T extends Comparable<? super T>> {
         return t;
     }
 
-    private AvlNode<T> doubleWithLeftChild(AvlNode<T> t) {
-        return null;
+    private AvlNode<T> doubleWithLeftChild(AvlNode<T> k3) {
+        k3.left = rotateWithRightChild(k3.left);
+        return rotateWithLeftChild(k3);
     }
 
-    private AvlNode<T> rotateWithLeftChild(AvlNode<T> t) {
-        return null;
+    private AvlNode<T> rotateWithLeftChild(AvlNode<T> k2) {
+        AvlNode<T> k1 = k2.left;
+        k2.left = k1.right;
+        k1.right = k2;
+        k2.height = Math.max(height(k2.left),height(k2.right));
+        k1.height = Math.max(height(k1.left),height(k1.right));
+        return k1;
     }
+
+    private AvlNode<T> doubleWithRightChild(AvlNode<T> k3) {
+        k3.right = rotateWithLeftChild(k3.right);
+        return rotateWithRightChild(k3);
+    }
+
+    private AvlNode<T> rotateWithRightChild(AvlNode<T> k2) {
+        AvlNode<T> k1 = k2.right;
+        k2.right = k1.left;
+        k1.left = k2;
+        k2.height = Math.max(height(k2.left),height(k2.right));
+        k1.height = Math.max(height(k1.left),height(k1.right));
+        return k1;
+    }
+
 
     private int compare(T x, AvlNode<T> t){
         return x.compareTo(t.element);
