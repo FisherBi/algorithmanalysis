@@ -94,4 +94,59 @@ public class AvlTree<T extends Comparable<? super T>> {
         return x.compareTo(t.element);
     }
 
+    private AvlNode<T> remove(T x, AvlNode<T> t){
+        if(t == null)
+            return t;
+
+        int compareResult = compare(x, t);
+
+        if(compareResult < 0){
+            t.left = remove(x, t.left);
+            //在左子树中删除后节点失衡，若失衡，则可以肯定的是该节点的右子树比左子树高
+            if(height(t.right) - height(t.left) == 2){
+                //一字形失衡，单旋转
+                if(height(t.right.right) >= height(t.right.left)){
+                    t = rotateWithRightChild(t);
+                }else{
+                    t = doubleWithRightChild(t);
+                }
+            }
+        }else if(compareResult > 0){
+            t.right = remove(x, t.right);
+            if(height(t.left) - height(t.right) == 2){
+                if(t.left != null){
+                    if(height(t.left.left) >= height(t.left.right)){
+                        t = rotateWithLeftChild(t);
+                    }else{
+                        t = doubleWithLeftChild(t);
+                    }
+                }
+            }
+        }
+        //找到了删除的节点，该节点左右子树都不为空
+        else if(t.left != null && t.right != null){
+            //特殊情况，当右子树的最小节点就是右儿子并且右儿子的右子树为空
+            boolean iooo = (t.right == findMin(t.right) && t.right.right == null);
+            t.element = findMin(t.right).element; //用又子树的最小节点替换该节点
+            t.right = remove(t.element,t.right);//删除有子树的最小节点
+            if(iooo){   //特殊情况成立，则节点已经失衡，左单旋转
+                t = rotateWithLeftChild(t);
+            }
+        }else{ //找到了要删除的节点，该节点不是满节点
+            t = t.left != null ? t.left : t.right;
+        }
+        if (t != null) {//更新高度
+            t.height = Math.max(height(t.left), height(t.right)) + 1;
+        }
+        return t;
+    }
+
+    private AvlNode<T> findMin(AvlNode<T> t){
+        if(t == null)
+            return null;
+        else if(t.left == null)
+            return t;
+        return findMin(t.left);
+    }
+
 }
