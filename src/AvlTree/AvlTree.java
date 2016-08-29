@@ -107,7 +107,7 @@ public class AvlTree<T extends Comparable<? super T>> {
                 //一字形失衡，单旋转
                 if(height(t.right.right) >= height(t.right.left)){
                     t = rotateWithRightChild(t);
-                }else{
+                }else{//双旋转
                     t = doubleWithRightChild(t);
                 }
             }
